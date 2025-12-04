@@ -1,5 +1,5 @@
 import 'package:bravoo/src/core/utils/app_data_types.dart';
-import 'package:bravoo/src/features/auth/data/repositories/auth_repository.dart';
+import 'package:bravoo/src/features/auth/domain/repositories/auth_repository.dart';
 
 class SignoutUsecase {
   SignoutUsecase(this._authRepository);

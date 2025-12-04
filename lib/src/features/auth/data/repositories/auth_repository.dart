@@ -2,16 +2,15 @@ import 'package:bravoo/src/core/models/app_responses.dart';
 import 'package:bravoo/src/core/utils/app_data_types.dart';
 import 'package:bravoo/src/features/auth/data/models/user_model.dart';
 import 'package:bravoo/src/features/auth/domain/entities/registration_entity.dart';
-import 'package:bravoo/src/features/auth/domain/repositories/auth_datasource.dart';
+import 'package:bravoo/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:either_dart/either.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AuthRepository {
-  final AuthDatasource datasource;
+class AuthRepositoryImpl extends AuthRepository {
+  AuthRepositoryImpl({required super.datasource});
 
-  AuthRepository({required this.datasource});
-
+  @override
   AsyncApiErrorOr<UserModel> login({
     required String email,
     required String password,
@@ -31,6 +30,7 @@ class AuthRepository {
     }
   }
 
+  @override
   AsyncApiErrorOr<(UserModel, bool)> registerEmail(
     RegistrationEntity registerData,
   ) async {
@@ -51,6 +51,7 @@ class AuthRepository {
     }
   }
 
+  @override
   AsyncApiErrorOr<UserModel> getUser() async {
     try {
       final result = await datasource.getUser();
@@ -69,6 +70,7 @@ class AuthRepository {
     }
   }
 
+  @override
   AsyncApiErrorOr<void> initGoogleSignIn() async {
     try {
       await datasource.initGoogleSignIn();
@@ -87,6 +89,7 @@ class AuthRepository {
     }
   }
 
+  @override
   AsyncApiErrorOr<(UserModel, bool)> googleSignin() async {
     try {
       final result = await datasource.googleSignin();
@@ -114,6 +117,7 @@ class AuthRepository {
     }
   }
 
+  @override
   AsyncApiErrorOr<String> resetPassword(String email) async {
     try {
       final result = await datasource.resetPassword(email);
@@ -132,6 +136,7 @@ class AuthRepository {
     }
   }
 
+  @override
   AsyncApiErrorOr<void> signOut() async {
     try {
       await datasource.signOut();

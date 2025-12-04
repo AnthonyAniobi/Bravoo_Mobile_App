@@ -1,7 +1,6 @@
 import 'package:bravoo/src/core/utils/app_data_types.dart';
 
-import 'package:bravoo/src/features/auth/data/repositories/auth_repository.dart';
-import 'package:bravoo/src/features/auth/domain/entities/registration_entity.dart';
+import 'package:bravoo/src/features/auth/domain/repositories/auth_repository.dart';
 
 class InitGoogleSigninUsecase {
   InitGoogleSigninUsecase(this._authRepository);

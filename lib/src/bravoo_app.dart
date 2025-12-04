@@ -23,6 +23,7 @@ class BravooApp extends StatelessWidget {
               return MaterialApp(
                 title: AppUtils.appName,
                 navigatorKey: AppUtils.navKey,
+                theme: ThemeData(fontFamily: 'Manrope'),
                 debugShowCheckedModeBanner: false,
                 initialRoute: AppRoutes.splash,
                 onGenerateRoute: AppRoutes.onGenerateRoute,

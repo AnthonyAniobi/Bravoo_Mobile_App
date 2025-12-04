@@ -1,6 +1,7 @@
 import 'package:bravoo/src/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppButton extends StatefulWidget {
   final VoidCallback onTap;
@@ -37,7 +38,7 @@ class AppButton extends StatefulWidget {
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: GoogleFonts.manrope(
           color: Colors.white,
           fontSize: 16.sp,
           fontWeight: FontWeight.w400,

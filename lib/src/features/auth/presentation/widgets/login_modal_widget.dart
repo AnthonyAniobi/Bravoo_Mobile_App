@@ -4,6 +4,7 @@ import 'package:bravoo/src/core/utils/app_routes.dart';
 import 'package:bravoo/src/core/widgets/app_button.dart';
 import 'package:bravoo/src/core/widgets/app_text_form_field.dart';
 import 'package:bravoo/src/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:bravoo/src/features/auth/presentation/widgets/app_toast.dart';
 import 'package:bravoo/src/features/auth/presentation/widgets/forget_password_modal_widget.dart';
 import 'package:bravoo/src/features/auth/presentation/widgets/signup_modal_widget.dart';
 import 'package:flutter/gestures.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 
 class LoginModalWidget extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -60,6 +62,8 @@ class _LoginModalWidgetState extends State<LoginModalWidget> {
               Navigator.of(
                 context,
               ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
+            } else if (state.loadStatus.isFailed) {
+              AppToast.warn(context, state.errorMessage);
             }
           },
           builder: (context, state) {
@@ -104,7 +108,19 @@ class _LoginModalWidgetState extends State<LoginModalWidget> {
                   obscureText: true,
                 ),
                 10.verticalSpace,
-                AppButton.black(text: 'Continue', onTap: () => login(context)),
+                MultiValueListenableBuilder(
+                  valueListenables: [emailController, passwordController],
+                  builder: (context, values, child) {
+                    return AppButton.black(
+                      disabled:
+                          emailController.text.isEmpty ||
+                          passwordController.text.isEmpty,
+                      isLoading: state.loadStatus.isLoading,
+                      text: 'Continue',
+                      onTap: () => login(context),
+                    );
+                  },
+                ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -132,7 +148,8 @@ class _LoginModalWidgetState extends State<LoginModalWidget> {
                 ),
                 10.verticalSpace,
                 AppButton.white(
-                  onTap: () {},
+                  isLoading: state.loadStatus.isLoading,
+                  onTap: googleLogin,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: Row(
@@ -161,7 +178,8 @@ class _LoginModalWidgetState extends State<LoginModalWidget> {
                 ),
                 10.verticalSpace,
                 AppButton.white(
-                  onTap: () {},
+                  isLoading: state.loadStatus.isLoading,
+                  onTap: appleLogin,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: Row(
@@ -270,6 +288,17 @@ class _LoginModalWidgetState extends State<LoginModalWidget> {
   }
 
   void login(BuildContext context) {
-    Navigator.of(context).pushNamed(AppRoutes.home);
+    context.read<AuthCubit>().login(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+  }
+
+  void googleLogin() {
+    context.read<AuthCubit>().googleSignin();
+  }
+
+  void appleLogin() {
+    // not available yet
   }
 }

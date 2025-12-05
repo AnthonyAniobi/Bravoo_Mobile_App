@@ -32,8 +32,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> init() async {
     await initGoogleSigninUsecase.call();
-    final result = await getUserDataUsecase.call();
-    result.fold(_loginFailed, updateLoginUser);
   }
 
   Future<void> getUserData() async {
@@ -42,11 +40,7 @@ class AuthCubit extends Cubit<AuthState> {
     result.fold(_loginFailed, updateLoginUser);
   }
 
-  Future<void> login({
-    required String email,
-    required String password,
-    required bool keepSignedIn,
-  }) async {
+  Future<void> login({required String email, required String password}) async {
     emit(
       state.copyWith(
         loadStatus: LoadStatusEnum.loading,

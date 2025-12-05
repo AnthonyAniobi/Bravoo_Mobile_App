@@ -5,10 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ForgetPasswordModalWidget extends StatelessWidget {
+class ForgetPasswordModalWidget extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   const ForgetPasswordModalWidget({super.key, required this.scaffoldKey});
 
+  @override
+  State<ForgetPasswordModalWidget> createState() =>
+      _ForgetPasswordModalWidgetState();
+}
+
+class _ForgetPasswordModalWidgetState extends State<ForgetPasswordModalWidget> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -74,7 +80,7 @@ class ForgetPasswordModalWidget extends StatelessWidget {
   }
 
   void navigateToSignUp(BuildContext context) {
-    scaffoldKey.currentState?.showBottomSheet(
+    widget.scaffoldKey.currentState?.showBottomSheet(
       sheetAnimationStyle: AnimationStyle(
         curve: Curves.bounceInOut,
         duration: const Duration(milliseconds: 800),

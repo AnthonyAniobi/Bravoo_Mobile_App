@@ -1,8 +1,6 @@
 import 'dart:ui';
 
 import 'package:bravoo/gen/assets.gen.dart';
-import 'package:bravoo/src/core/constants/app_colors.dart';
-import 'package:bravoo/src/core/widgets/app_button.dart';
 import 'package:bravoo/src/features/auth/presentation/widgets/login_modal_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

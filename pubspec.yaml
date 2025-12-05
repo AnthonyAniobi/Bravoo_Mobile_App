@@ -48,6 +48,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svg/
+    - .env
   # example:
   # fonts:
   #   - family: Manrope

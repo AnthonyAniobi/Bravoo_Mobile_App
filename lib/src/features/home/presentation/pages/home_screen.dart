@@ -296,6 +296,45 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                                 10.verticalSpace,
+                                Row(
+                                  children: [
+                                    Text(
+                                      'You referred',
+                                      style: GoogleFonts.manrope(
+                                        color: Colors.white,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    5.horizontalSpace,
+                                    SvgPicture.asset(
+                                      Assets.svg.info,
+                                      width: 16.r,
+                                      colorFilter: ColorFilter.mode(
+                                        Colors.white,
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    SvgPicture.asset(
+                                      Assets.svg.userMultiple,
+                                      width: 16.r,
+                                      colorFilter: ColorFilter.mode(
+                                        Colors.white,
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
+                                    5.horizontalSpace,
+                                    Text(
+                                      '1',
+                                      style: GoogleFonts.manrope(
+                                        color: Colors.white,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),

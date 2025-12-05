@@ -2,7 +2,6 @@ import 'package:bravoo/gen/assets.gen.dart';
 import 'package:bravoo/src/core/constants/app_colors.dart';
 import 'package:bravoo/src/core/widgets/app_button.dart';
 import 'package:bravoo/src/core/widgets/app_text_form_field.dart';
-import 'package:bravoo/src/features/auth/presentation/widgets/forget_password_modal_widget.dart';
 import 'package:bravoo/src/features/auth/presentation/widgets/login_modal_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

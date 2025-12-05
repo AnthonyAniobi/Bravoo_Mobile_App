@@ -70,14 +70,17 @@ class $AssetsSvgGen {
   /// File path: assets/svg/arrow_back.svg
   String get arrowBack => 'assets/svg/arrow_back.svg';
 
-  /// File path: assets/svg/elements (1).svg
-  String get elements1 => 'assets/svg/elements (1).svg';
+  /// File path: assets/svg/checkmark.svg
+  String get checkmark => 'assets/svg/checkmark.svg';
 
-  /// File path: assets/svg/elements.svg
-  String get elements => 'assets/svg/elements.svg';
+  /// File path: assets/svg/copy.svg
+  String get copy => 'assets/svg/copy.svg';
 
   /// File path: assets/svg/google.svg
   String get google => 'assets/svg/google.svg';
+
+  /// File path: assets/svg/info.svg
+  String get info => 'assets/svg/info.svg';
 
   /// File path: assets/svg/logo.svg
   String get logo => 'assets/svg/logo.svg';
@@ -89,9 +92,10 @@ class $AssetsSvgGen {
   List<String> get values => [
     apple,
     arrowBack,
-    elements1,
-    elements,
+    checkmark,
+    copy,
     google,
+    info,
     logo,
     userMultiple,
   ];

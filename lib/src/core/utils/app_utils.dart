@@ -13,7 +13,7 @@ class AppUtils {
     return dotenv.env['SUPABASE_PROJECT_URL'] ?? '';
   }
 
-  static String get supabaseAnonKey => dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+  static String get supabaseAnonKey => dotenv.env['SUPABASE_API_KEY'] ?? '';
 
   static String get googleAndroidClientId =>
       dotenv.env['ANDROID_GOOGLE_CLIENT_ID'] ?? '';
@@ -21,7 +21,7 @@ class AppUtils {
   static String get googleIosClientId =>
       dotenv.env['IOS_GOOGLE_CLIENT_ID'] ?? '';
 
-  static String get googleServerId => dotenv.env['GOOGLE_SERVER_ID'] ?? '';
+  static String get googleServerId => dotenv.env['WEB_CLIENT_ID'] ?? '';
 
   static String authToken = '';
 

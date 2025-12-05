@@ -25,10 +25,7 @@ class SupabaseAuthDatasource extends AuthDatasource {
     final response = await _supabase.auth.signUp(
       email: registerData.email,
       password: registerData.password,
-      data: {
-        'full_name': '${registerData.firstName} ${registerData.lastName}',
-        'phone': registerData.phone,
-      },
+      data: {'full_name': '${registerData.fullName}'},
     );
     return UserModel.fromSupabaseUser(response.user!);
   }

@@ -1,5 +1,6 @@
 import 'package:bravoo/src/core/services/dependency_injection_service.dart';
 import 'package:bravoo/src/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:bravoo/src/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BlocService {
@@ -7,6 +8,9 @@ class BlocService {
     //
     BlocProvider(
       create: (context) => GetInjectionService.inst<AuthCubit>()..init(),
+    ),
+    BlocProvider(
+      create: (context) => GetInjectionService.inst<ForgetPasswordCubit>(),
     ),
   ];
 }

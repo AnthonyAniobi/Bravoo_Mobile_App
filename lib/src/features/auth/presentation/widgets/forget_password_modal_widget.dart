@@ -1,7 +1,10 @@
 import 'package:bravoo/src/core/constants/app_colors.dart';
 import 'package:bravoo/src/core/widgets/app_button.dart';
 import 'package:bravoo/src/core/widgets/app_text_form_field.dart';
+import 'package:bravoo/src/features/auth/presentation/cubit/forget_password_cubit.dart';
+import 'package:bravoo/src/features/auth/presentation/widgets/app_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,6 +18,22 @@ class ForgetPasswordModalWidget extends StatefulWidget {
 }
 
 class _ForgetPasswordModalWidgetState extends State<ForgetPasswordModalWidget> {
+  late final TextEditingController emailController;
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    context.read<ForgetPasswordCubit>().reset();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -56,12 +75,44 @@ class _ForgetPasswordModalWidgetState extends State<ForgetPasswordModalWidget> {
               ],
             ),
             20.verticalSpace,
-            AppTextFormField(
-              hintText: 'Email Address',
-              keyboardType: TextInputType.emailAddress,
+            Form(
+              key: _formKey,
+              child: AppTextFormField(
+                controller: emailController,
+                hintText: 'Email Address',
+                keyboardType: TextInputType.emailAddress,
+              ),
             ),
             10.verticalSpace,
-            AppButton.black(text: 'Send code', onTap: () {}),
+            BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
+              listener: (context, state) {
+                if (state.forgetPasswordStatus.isSuccess) {
+                  Navigator.of(context).pop();
+                  AppToast.success(
+                    context,
+                    'A password reset code has been sent to your email',
+                  );
+                } else if (state.forgetPasswordStatus.isFailed) {
+                  AppToast.warn(
+                    context,
+                    state.errorMessage ?? 'Some error occured',
+                  );
+                }
+              },
+              builder: (context, state) {
+                return ValueListenableBuilder(
+                  valueListenable: emailController,
+                  builder: (context, value, child) {
+                    return AppButton.black(
+                      disabled: emailController.text.isEmpty,
+                      isLoading: state.forgetPasswordStatus.isLoading,
+                      text: 'Send code',
+                      onTap: forgetPassword,
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -79,19 +130,12 @@ class _ForgetPasswordModalWidgetState extends State<ForgetPasswordModalWidget> {
     );
   }
 
-  void navigateToSignUp(BuildContext context) {
-    widget.scaffoldKey.currentState?.showBottomSheet(
-      sheetAnimationStyle: AnimationStyle(
-        curve: Curves.bounceInOut,
-        duration: const Duration(milliseconds: 800),
-      ),
-      (context) {
-        return Container();
-      },
+  void forgetPassword() {
+    if (_formKey.currentState != null && !_formKey.currentState!.validate()) {
+      return;
+    }
+    context.read<ForgetPasswordCubit>().forgetPassword(
+      emailController.text.trim(),
     );
-  }
-
-  void navigateToForgotPassword(BuildContext context) {
-    Navigator.of(context).pop();
   }
 }

@@ -1,10 +1,9 @@
 import 'package:bravoo/gen/assets.gen.dart';
 import 'package:bravoo/src/core/constants/app_colors.dart';
-import 'package:bravoo/src/core/utils/app_routes.dart';
+import 'package:bravoo/src/core/utils/app_validators.dart';
 import 'package:bravoo/src/core/widgets/app_button.dart';
 import 'package:bravoo/src/core/widgets/app_text_form_field.dart';
 import 'package:bravoo/src/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:bravoo/src/features/auth/presentation/widgets/app_toast.dart';
 import 'package:bravoo/src/features/auth/presentation/widgets/forget_password_modal_widget.dart';
 import 'package:bravoo/src/features/auth/presentation/widgets/signup_modal_widget.dart';
 import 'package:flutter/gestures.dart';
@@ -27,6 +26,7 @@ class _LoginModalWidgetState extends State<LoginModalWidget> {
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
   late final ValueNotifier<bool> isPasswordVisible;
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -56,192 +56,201 @@ class _LoginModalWidgetState extends State<LoginModalWidget> {
           color: AppColors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
-        child: BlocConsumer<AuthCubit, AuthState>(
-          listener: (context, state) {
-            if (state.isLoggedIn) {
-              Navigator.of(
-                context,
-              ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
-            } else if (state.loadStatus.isFailed) {
-              AppToast.warn(context, state.errorMessage);
-            }
-          },
+        child: BlocBuilder<AuthCubit, AuthState>(
           builder: (context, state) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                12.verticalSpace,
-                Align(child: topNotch()),
-                const Row(),
-                20.verticalSpace,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Continue to log in',
-                      style: GoogleFonts.manrope(
-                        color: AppColors.textDefault,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      'Let\'s get you started',
-                      style: GoogleFonts.manrope(
-                        color: AppColors.textSecondary,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-                20.verticalSpace,
-                AppTextFormField(
-                  controller: emailController,
-                  hintText: 'Email Address',
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                10.verticalSpace,
-                AppTextFormField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  obscureText: true,
-                ),
-                10.verticalSpace,
-                MultiValueListenableBuilder(
-                  valueListenables: [emailController, passwordController],
-                  builder: (context, values, child) {
-                    return AppButton.black(
-                      disabled:
-                          emailController.text.isEmpty ||
-                          passwordController.text.isEmpty,
-                      isLoading: state.loadStatus.isLoading,
-                      text: 'Continue',
-                      onTap: () => login(context),
-                    );
-                  },
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () => navigateToForgotPassword(context),
-                    child: Text(
-                      'Forgot your password?',
-                      style: GoogleFonts.manrope(
-                        color: AppColors.primary,
-                        decoration: TextDecoration.underline,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.sp,
-                      ),
-                    ),
-                  ),
-                ),
-                10.verticalSpace,
-                Align(
-                  child: Text(
-                    'OR',
-                    style: GoogleFonts.manrope(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-                10.verticalSpace,
-                AppButton.white(
-                  isLoading: state.loadStatus.isLoading,
-                  onTap: googleLogin,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          Assets.svg.google,
-                          height: 20.r,
-                          width: 20.r,
-                        ),
-                        10.horizontalSpace,
-                        Expanded(
-                          child: Text(
-                            'Continue with Google',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.dmSans(
-                              color: AppColors.textDefault,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                10.verticalSpace,
-                AppButton.white(
-                  isLoading: state.loadStatus.isLoading,
-                  onTap: appleLogin,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          Assets.svg.apple,
-                          height: 20.r,
-                          width: 20.r,
-                        ),
-                        10.horizontalSpace,
-                        Expanded(
-                          child: Text(
-                            'Continue with Apple',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.dmSans(
-                              color: AppColors.textDefault,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                20.verticalSpace,
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
+            return Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  12.verticalSpace,
+                  Align(child: topNotch()),
+                  const Row(),
+                  20.verticalSpace,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextSpan(text: 'Don\'t have an account? '),
-                      TextSpan(
-                        text: 'Sign up',
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            navigateToSignUp(context);
-                          },
+                      Text(
+                        'Continue to log in',
                         style: GoogleFonts.manrope(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
+                          color: AppColors.textDefault,
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        'Let\'s get you started',
+                        style: GoogleFonts.manrope(
+                          color: AppColors.textSecondary,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
+                  ),
+                  20.verticalSpace,
+                  AppTextFormField(
+                    controller: emailController,
+                    hintText: 'Email Address',
+                    keyboardType: TextInputType.emailAddress,
+                    validator: AppValidators.email,
+                  ),
+                  10.verticalSpace,
+                  ValueListenableBuilder(
+                    valueListenable: isPasswordVisible,
+                    builder: (context, value, child) {
+                      return AppTextFormField(
+                        controller: passwordController,
+                        hintText: 'Password',
+                        obscureText: !value,
+                        validator: AppValidators.password,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            isPasswordVisible.value = !value;
+                          },
+                          icon: Icon(
+                            value ? Icons.visibility : Icons.visibility_off,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  10.verticalSpace,
+                  MultiValueListenableBuilder(
+                    valueListenables: [emailController, passwordController],
+                    builder: (context, values, child) {
+                      return AppButton.black(
+                        disabled:
+                            emailController.text.isEmpty ||
+                            passwordController.text.isEmpty,
+                        isLoading: state.loadStatus.isLoading,
+                        text: 'Continue',
+                        onTap: () => login(context),
+                      );
+                    },
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => navigateToForgotPassword(context),
+                      child: Text(
+                        'Forgot your password?',
+                        style: GoogleFonts.manrope(
+                          color: AppColors.primary,
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+                  10.verticalSpace,
+                  Align(
+                    child: Text(
+                      'OR',
+                      style: GoogleFonts.manrope(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  10.verticalSpace,
+                  AppButton.white(
+                    isLoading: state.googleSigninStatus.isLoading,
+                    onTap: googleLogin,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            Assets.svg.google,
+                            height: 20.r,
+                            width: 20.r,
+                          ),
+                          10.horizontalSpace,
+                          Expanded(
+                            child: Text(
+                              'Continue with Google',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.dmSans(
+                                color: AppColors.textDefault,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  10.verticalSpace,
+                  AppButton.white(
+                    isLoading: state.loadStatus.isLoading,
+                    onTap: appleLogin,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            Assets.svg.apple,
+                            height: 20.r,
+                            width: 20.r,
+                          ),
+                          10.horizontalSpace,
+                          Expanded(
+                            child: Text(
+                              'Continue with Apple',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.dmSans(
+                                color: AppColors.textDefault,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  20.verticalSpace,
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(text: 'Don\'t have an account? '),
+                        TextSpan(
+                          text: 'Sign up',
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              navigateToSignUp(context);
+                            },
+                          style: GoogleFonts.manrope(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                      style: GoogleFonts.manrope(
+                        color: AppColors.textSecondary,
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  5.verticalSpace,
+                  Text(
+                    'By continuing you agree to the Rules and Policy',
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.manrope(
                       color: AppColors.textSecondary,
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                ),
-                5.verticalSpace,
-                Text(
-                  'By continuing you agree to the Rules and Policy',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.textSecondary,
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),
@@ -288,6 +297,9 @@ class _LoginModalWidgetState extends State<LoginModalWidget> {
   }
 
   void login(BuildContext context) {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
     context.read<AuthCubit>().login(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),

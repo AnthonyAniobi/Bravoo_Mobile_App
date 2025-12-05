@@ -9,6 +9,10 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
 
   final ForgetPasswordUsecase forgetPasswordUsecase;
 
+  void reset() {
+    emit(const ForgetPasswordState());
+  }
+
   Future<void> forgetPassword(String email) async {
     emit(state.copy(forgetPasswordStatus: LoadStatusEnum.loading));
     final result = await forgetPasswordUsecase.call(email: email);
@@ -30,10 +34,6 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
         );
       },
     );
-  }
-
-  void reset() {
-    emit(const ForgetPasswordState());
   }
 }
 

@@ -10,6 +10,7 @@ import 'package:bravoo/src/features/auth/domain/usecases/google_signin_usecase.d
 import 'package:bravoo/src/features/auth/domain/usecases/init_google_signin_usecase.dart';
 import 'package:bravoo/src/features/auth/domain/usecases/signout_usecase.dart';
 import 'package:bravoo/src/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:bravoo/src/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class GetInjectionService {
@@ -56,6 +57,10 @@ class GetInjectionService {
         getUserDataUsecase: inst<GetUserDataUsecase>(),
         signoutUsecase: inst<SignoutUsecase>(),
       ),
+    );
+
+    inst.registerLazySingleton<ForgetPasswordCubit>(
+      () => ForgetPasswordCubit(inst<ForgetPasswordUsecase>()),
     );
   }
 }

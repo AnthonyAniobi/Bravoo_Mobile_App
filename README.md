@@ -112,13 +112,6 @@ lib/
 
 See `pubspec.yaml` for complete dependency list.
 
-## 🧪 Testing
-
-Run tests with:
-```bash
-flutter test
-```
-
 ## 📝 Development Notes
 
 - The app uses secure token storage for authentication sessions
